@@ -1,10 +1,28 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { createUser } from '../redux/UserCrud_APP/action';
 import "./crud.css"
 const UserForm =()=> {
     const [user,setUser]=useState({ name:"", email:"", address:""});
+    const dispatch=useDispatch();
+
+    const handleSubmit=(e)=>{
+           e.preventDefault();
+           let userOBj={
+             id:Date.now(),
+             user:{
+                name:user.name,
+                email:user.email,
+                address:user.address,
+             }
+           }
+           dispatch(createUser(userOBj));
+           setUser({name:"", email:"", address:""});
+           
+    }
   return (
     <div className='form-content'>
-    <form className='crud-form'>
+    <form className='crud-form' onSubmit={handleSubmit}>
     <h1>User Form</h1>
      <div className='name-form'>
          <label htmlFor='name'>Name:</label>
@@ -34,7 +52,7 @@ const UserForm =()=> {
        />
      </div>
    
-       <button className='btn' >Create User</button>
+       <button className='btn' type='submit'>Create User</button>
     
       
     </form>
