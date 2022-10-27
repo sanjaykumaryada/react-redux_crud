@@ -1,48 +1,64 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteUser,  updateUser, editUser } from '../redux/UserCrud_APP/action';
+import { deleteUser, updateUser, editUser, createUser } from '../redux/UserCrud_APP/action';
 import UserForm from './UserForm';
 import UserList from './UsersList';
 const Crud = () => {
     const [user, setUser] = useState({ name: "", email: "", address: "" });
-    const [edit, setEdit]=useState(false);
-    const [id, setid]=useState();
-    const usersList = useSelector((state) => state.operationReducer);
-    console.log(usersList);
+    const [edit, setEdit] = useState(false);
+    const [id, setId] = useState();
+    const { edituser, usersList } = useSelector((state) => state.operationReducer);
+    console.log(edituser);
     const dispatch = useDispatch();
+
+    const handleCreateUser = (e) => {
+        e.preventDefault();
+        let userOBj = {
+            id: Date.now(),
+            user: {
+                name: user.name,
+                email: user.email,
+                address: user.address,
+            }
+        }
+        dispatch(createUser(userOBj));
+        setUser({ name: "", email: "", address: "" });
+
+    }
     const handleDelete = (id) => {
         dispatch(deleteUser(id));
-
+        setUser({ name: "", email: "", address: "" });
     }
     const handleEdit = (id) => {
-        const user=usersList.filter(user=>user.id===id)
+        if (edituser !== undefined) {
+            console.log(edituser)
+            setUser(edituser[0].user);
+        }
+        dispatch(editUser(id))
         setEdit(true);
-        setUser(user[0].user);
-        setid(id);
-    //  dispatch(editUser(id))
-    
+        setId(id);
+
     }
 
-    const handleUpdate=()=>{
-        // const updateObj={
-        //        id:Date.now(),
-        //        user:{
-        //         name:user.name,
-        //         email:user.email,
-        //         address:user.address
-        //        }
-        // }
+    const handleUpdate = () => {
+        const updateObj = {
+            id: id,
+            user: {
+                name: user.name,
+                email: user.email,
+                address: user.address
+            }
+        }
 
-        // dispatch(updateUser(updateObj));
-        usersList.map((users=>users.id===id  ?(users.user=user):(null)));
+        dispatch(updateUser(updateObj));
         setEdit(false);
-        setUser({ name:"", email:"",address:""});
+        setUser({ name: "", email: "", address: "" });
     }
     return (
         <div className='main-crud-div'>
             <h1>CRUD APP</h1>
-            <UserForm user={user} setUser={setUser} edit={edit}  handleUpdate={handleUpdate} />
-            <UserList usersList={usersList} handleDelete={handleDelete} handleEdit={handleEdit}/>
+            <UserForm user={user} setUser={setUser} edituser={edituser} edit={edit} handleUpdate={handleUpdate} handleCreateUser={handleCreateUser} />
+            <UserList usersList={usersList} handleDelete={handleDelete} handleEdit={handleEdit} />
         </div>
     )
 }
