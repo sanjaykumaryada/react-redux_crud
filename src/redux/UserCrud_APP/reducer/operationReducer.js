@@ -3,6 +3,7 @@ import { DELETE_USER } from "../../constant";
 import { UPDATE_USER } from "../../constant";
 import { EDIT_USER } from "../../constant";
 const initialState = {
+    edit:false,
     edituser: undefined,
     usersList: [],
 }
@@ -25,6 +26,7 @@ export const operationReducer = (state = initialState, action) => {
             const EditUser = state.usersList.filter(user => user.id === action.id);
             return {
                 ...state,
+                edit:true,
                 edituser: EditUser
             };
         case UPDATE_USER:
@@ -36,10 +38,11 @@ export const operationReducer = (state = initialState, action) => {
                     item.user = data.user;
 
                 }
-                updatedArray.push(item);
+              return  updatedArray.push(item);
             })
             return {
                 ...state,
+                edit:false,
                 edituser: undefined,
                 usersList: updatedArray
             };

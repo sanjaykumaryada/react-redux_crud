@@ -1,10 +1,10 @@
-import React, { useContext } from 'react'
-import { UserContext } from './Crud'
+import React from 'react'
+import { useSelector } from 'react-redux';
 import "./crud.css"
-const UserForm = ({ handleUpdate, handleCreateUser }) => {
-    const {user, setUser,edit} =useContext(UserContext);
+const UserForm = ({user,handleUser,handlesetUser }) => {
+    const { edit } = useSelector((state) => state.operationReducer);
     return (
-        <div className='form-content'>
+        <div className='form-content' onSubmit={(e)=>handleUser(e, user)}>
             <form className='crud-form' >
                 <h1>User Form</h1>
                 <div className='name-form'>
@@ -12,9 +12,10 @@ const UserForm = ({ handleUpdate, handleCreateUser }) => {
                     <input
                         type="text"
                         placeholder='Enter your name'
+                        name='name'
                         required
                         value={user.name}
-                        onChange={(e) => setUser({ ...user, name: e.target.value })}
+                        onChange={handlesetUser}
                     />
                 </div>
                 <div className='email-form'>
@@ -22,20 +23,22 @@ const UserForm = ({ handleUpdate, handleCreateUser }) => {
                     <input
                         type="email"
                         placeholder="Enter your email"
+                        name='email'
                         required
                         value={user.email}
-                        onChange={(e) => setUser({ ...user, email: e.target.value })}
+                        onChange={handlesetUser}
                     />
                 </div>
                 <div className='address-form'>
                     <label htmlFor='address'>Address:</label>
                     <textarea placeholder='type your address here'
+                    name='address'
                         value={user.address}
-                        onChange={(e) => setUser({ ...user, address: e.target.value })}
+                        onChange={handlesetUser}
                     />
                 </div>
                 {
-                    edit ? (<button className='btn' onClick={handleUpdate}>Update User</button>) : (<button className='btn' onClick={(e) => handleCreateUser(e)}>Create User</button>)
+                    edit ? (<button className='btn'>Update User</button>) : (<button className='btn'>Create User</button>)
                 }
 
 
