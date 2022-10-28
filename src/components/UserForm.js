@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from './Crud'
 import "./crud.css"
-const UserForm = ({ user, setUser, edit, handleUpdate, handleCreateUser }) => {
+const UserForm = ({ handleUpdate, handleCreateUser }) => {
+    const {user, setUser,edit} =useContext(UserContext);
     return (
         <div className='form-content'>
             <form className='crud-form' >

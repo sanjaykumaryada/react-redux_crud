@@ -1,7 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import "./crud.css"
 import UserCard from './UserCard';
-const UserList = ({usersList,handleDelete, handleEdit}) => {
+const UserList = ({handleDelete, handleEdit}) => {
+    const {usersList}=useSelector(state=>state.operationReducer)
     return (
         <div className='userslist-div'>
             <h1>List of Users</h1>

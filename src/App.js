@@ -5,8 +5,7 @@ function App() {
 
     <div className="App">
       <Crud />
-
-    </div>
+      </div>
 
   );
 }

@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { createContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteUser, updateUser, editUser, createUser } from '../redux/UserCrud_APP/action';
 import UserForm from './UserForm';
 import UserList from './UsersList';
+export const UserContext = createContext({});
 const Crud = () => {
     const [user, setUser] = useState({ name: "", email: "", address: "" });
     const [edit, setEdit] = useState(false);
     const [id, setId] = useState();
-    const { edituser, usersList } = useSelector((state) => state.operationReducer);
-    console.log(edituser);
+    const { edituser } = useSelector((state) => state.operationReducer);
+
     const dispatch = useDispatch();
 
     const handleCreateUser = (e) => {
@@ -31,7 +32,6 @@ const Crud = () => {
     }
     const handleEdit = (id) => {
         if (edituser !== undefined) {
-            console.log(edituser)
             setUser(edituser[0].user);
         }
         dispatch(editUser(id))
@@ -57,8 +57,10 @@ const Crud = () => {
     return (
         <div className='main-crud-div'>
             <h1>CRUD APP</h1>
-            <UserForm user={user} setUser={setUser} edituser={edituser} edit={edit} handleUpdate={handleUpdate} handleCreateUser={handleCreateUser} />
-            <UserList usersList={usersList} handleDelete={handleDelete} handleEdit={handleEdit} />
+            <UserContext.Provider value={{ user, setUser, edit }}>
+                <UserForm handleUpdate={handleUpdate} handleCreateUser={handleCreateUser} />
+                <UserList handleDelete={handleDelete} handleEdit={handleEdit} />
+            </UserContext.Provider>
         </div>
     )
 }
